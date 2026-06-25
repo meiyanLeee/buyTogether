@@ -1,0 +1,36 @@
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+.nested-git-backup/
+
+# Build outputs
+**/target/
+**/build/
+**/dist/
+**/out/
+*.class
+
+# Runtime logs and generated local data
+*.log
+logs/
+hm-dianping/tokens.txt
+tokens.txt
+
+# Local caches / unrelated demos
+example-cache/
+redis-demo/
+
+# Keep only the project frontend from the bundled Windows nginx folder.
+nginx-1.18.0/*
+!nginx-1.18.0/html/
+nginx-1.18.0/html/*
+!nginx-1.18.0/html/hmdp/
+!nginx-1.18.0/html/hmdp/**
+
+# Never publish bundled server binaries or runtime files.
+nginx-1.18.0/nginx.exe
+nginx-1.18.0/logs/
+nginx-1.18.0/temp/

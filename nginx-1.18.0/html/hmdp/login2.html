@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>邻里团购 - 密码登录</title>
+  <link rel="stylesheet" href="./css/element.css">
+  <link href="./css/login.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <main class="login-shell">
+    <section class="login-hero">
+      <div class="brand-row">
+        <button class="ghost-back" @click="goBack"><i class="el-icon-arrow-left"></i></button>
+        <div class="brand-mark">邻</div>
+        <div>
+          <h1>邻里团购</h1>
+          <p>社区自提 · 限时好券 · 团长精选</p>
+        </div>
+      </div>
+      <div class="hero-copy">
+        <h2>团长好券，一键回家</h2>
+        <p>用手机号密码登录，继续管理你的关注、订单和抢券记录。</p>
+      </div>
+      <div class="benefit-grid">
+        <div><b>热券</b><span>准点开抢</span></div>
+        <div><b>美食</b><span>评分优先</span></div>
+        <div><b>自提</b><span>少等少跑</span></div>
+      </div>
+    </section>
+
+    <section class="login-card">
+      <div class="card-head">
+        <span>手机号密码登录</span>
+        <a href="/login.html">验证码登录</a>
+      </div>
+
+      <label class="field-label">手机号</label>
+      <input class="form-input" type="tel" maxlength="11" placeholder="请输入手机号" v-model="form.phone">
+
+      <label class="field-label">密码</label>
+      <input class="form-input" type="password" placeholder="请输入密码" v-model="form.password">
+
+      <div class="form-link-row">
+        <a href="javascript:void(0)">忘记密码</a>
+      </div>
+
+      <button class="login-btn" @click="login">登录我的社区账号</button>
+
+      <label class="agreement">
+        <input type="checkbox" v-model="radio" true-value="1" false-value="">
+        <span>我已阅读并同意《邻里团购用户服务协议》《隐私政策》</span>
+      </label>
+    </section>
+  </main>
+</div>
+
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/element.js"></script>
+<script src="./js/common.js"></script>
+<script>
+const app = new Vue({
+  el: "#app",
+  data: {
+    radio: "",
+    form: {}
+  },
+  methods: {
+    login() {
+      if (!this.radio) {
+        this.$message.error("请先确认阅读用户协议");
+        return;
+      }
+      if (!this.form.phone || !this.form.password) {
+        this.$message.error("手机号和密码不能为空");
+        return;
+      }
+      axios.post("/user/login", this.form)
+        .then(res => {
+          if (res.success && res.data) {
+            setAuthToken(res.data);
+            location.href = "/info.html";
+          } else {
+            this.$message.error(res.errorMsg || "登录失败");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          this.$message.error("请求异常，请重试");
+        });
+    },
+    goBack() {
+      history.back();
+    }
+  }
+})
+</script>
+</body>
+</html>

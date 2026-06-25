@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>邻里团购 - 自提点详情</title>
+  <link rel="stylesheet" href="./css/element.css">
+  <link href="./css/shop-detail.css" rel="stylesheet">
+  <link href="./css/main.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <div class="detail-shell">
+    <section class="detail-hero">
+      <img :src="shop.images && shop.images[0] ? shop.images[0] : '/imgs/community/photo1.png'" alt="">
+      <div class="hero-mask"></div>
+      <div class="hero-nav">
+        <button @click="goBack"><i class="el-icon-arrow-left"></i></button>
+        <button><i class="el-icon-more"></i></button>
+      </div>
+      <div class="hero-info">
+        <span class="hero-badge">社区自提点</span>
+        <h1>{{shop.name}}</h1>
+        <p>{{shop.area}} · {{shop.comments}} 人跟团 · 服务 {{shop.score / 10 || 4.8}}</p>
+      </div>
+    </section>
+
+    <section class="pickup-card">
+      <div>
+        <b>今日自提窗口</b>
+        <span>{{shop.openHours || '10:00-22:00'}}</span>
+      </div>
+      <div>
+        <b>自提地址</b>
+        <span>{{shop.address}}</span>
+      </div>
+    </section>
+
+    <section class="gallery-row" v-if="shop.images">
+      <img v-for="(s,i) in shop.images" :key="i" :src="s" alt="">
+    </section>
+
+    <section class="voucher-section">
+      <div class="section-title">
+        <b>限时团购券</b>
+        <span>Redis 秒杀库存 · 一人一单</span>
+      </div>
+      <div class="voucher-box" v-for="v in vouchers" :key="v.id" v-if="!isEnd(v)">
+        <div class="voucher-left">
+          <div class="voucher-title">{{v.title}}</div>
+          <div class="voucher-subtitle">{{v.subTitle}}</div>
+          <div class="voucher-price">
+            <b>{{util.formatPrice(v.payValue)}}</b>
+            <span>原价 {{util.formatPrice(v.actualValue)}}</span>
+          </div>
+        </div>
+        <div class="voucher-right">
+          <button :class="{'disable-btn': isNotBegin(v) || v.stock < 1}" @click="seckill(v)">立即参团</button>
+          <span>剩余 {{v.stock}} 份</span>
+          <small>{{formatTime(v)}}</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="notice-grid">
+      <div><i class="el-icon-box"></i><b>到货提醒</b><span>团长会在动态里更新</span></div>
+      <div><i class="el-icon-location-outline"></i><b>小区自提</b><span>顺路领取，不用排队</span></div>
+      <div><i class="el-icon-refresh"></i><b>库存同步</b><span>抢券后异步生成订单</span></div>
+    </section>
+
+    <section class="comment-section">
+      <div class="section-title">
+        <b>团友反馈</b>
+        <span>本周复购榜第 3</span>
+      </div>
+      <div class="comment-tags">
+        <span>自提方便</span><span>价格划算</span><span>团长靠谱</span><span>库存透明</span>
+      </div>
+      <div class="comment-box">
+        <img src="/imgs/community/photo5.png" alt="">
+        <div>
+          <b>社区买手小鹿</b>
+          <p>晚上下班顺路拿，团长提前把缺货替换说清楚，券的库存也能看到，适合做高并发抢购演示。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/element.js"></script>
+<script src="./js/common.js"></script>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      util,
+      shop: {},
+      vouchers: []
+    },
+    created() {
+      const shopId = util.getUrlParam("id");
+      this.queryShopById(shopId);
+      this.queryVoucher(shopId);
+    },
+    methods: {
+      goBack() {
+        history.back();
+      },
+      queryShopById(shopId) {
+        axios.get("/shop/" + shopId)
+          .then(({data}) => {
+            data.images = data.images.split(",");
+            this.shop = data;
+          })
+          .catch(this.$message.error)
+      },
+      queryVoucher(shopId) {
+        axios.get("/voucher/list/" + shopId)
+          .then(({data}) => { this.vouchers = data || []; })
+          .catch(this.$message.error)
+      },
+      formatTime(v) {
+        const b = new Date(v.beginTime);
+        const e = new Date(v.endTime);
+        return (b.getMonth() + 1) + "月" + b.getDate() + "日 "
+          + b.getHours() + ":" + this.formatMinutes(b.getMinutes())
+          + " - " + e.getHours() + ":" + this.formatMinutes(e.getMinutes());
+      },
+      formatMinutes(m) {
+        return m < 10 ? "0" + m : m;
+      },
+      isNotBegin(v) {
+        return new Date(v.beginTime).getTime() > new Date().getTime();
+      },
+      isEnd(v) {
+        return new Date(v.endTime).getTime() < new Date().getTime();
+      },
+      seckill(v) {
+        if (!token) {
+          this.$message.error("请先登录后再参团");
+          setTimeout(() => { location.href = "/login.html"; }, 200);
+          return;
+        }
+        if (this.isNotBegin(v)) {
+          this.$message.error("团购券尚未开抢");
+          return;
+        }
+        if (this.isEnd(v)) {
+          this.$message.error("本场团购已经结束");
+          return;
+        }
+        if (v.stock < 1) {
+          this.$message.error("库存不足，请刷新后再试");
+          return;
+        }
+        axios.post("/voucher-order/seckill/" + v.id)
+          .then(({data}) => { this.$message.success("参团成功，订单号：" + data); })
+          .catch(this.$message.error)
+      }
+    }
+  })
+</script>
+</body>
+</html>
+

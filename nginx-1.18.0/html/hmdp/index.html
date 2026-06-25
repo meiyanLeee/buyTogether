@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>邻里团购</title>
+  <link rel="stylesheet" href="./css/element.css">
+  <link href="./css/index.css" rel="stylesheet">
+  <link href="./css/main.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <div class="home-shell">
+    <div class="home-top">
+      <div>
+        <div class="brand-mark">邻里团购</div>
+        <div class="brand-sub">小区自提 · 团长精选 · 限时开抢</div>
+      </div>
+      <button class="profile-btn" @click="toPage(4)"><i class="el-icon-user"></i></button>
+    </div>
+
+    <div class="search-card">
+      <i class="el-icon-search"></i>
+      <el-input size="mini" placeholder="搜自提点、团购券、团长动态"></el-input>
+    </div>
+
+    <section class="hero-panel">
+      <img src="/imgs/community/photo3.png" alt="今日团购">
+      <div class="hero-copy">
+        <div class="hero-kicker">今晚 20:00 开团</div>
+        <div class="hero-title">社区好物先领券，再顺路自提</div>
+        <div class="hero-subtitle">生鲜果蔬、家庭餐食、日用纸品都能拼</div>
+        <button @click="toShopList(types[0] && types[0].id, types[0] && types[0].name)">去抢团购券</button>
+      </div>
+    </section>
+
+    <section class="quick-stats">
+      <div>
+        <b>14</b>
+        <span>附近自提点</span>
+      </div>
+      <div>
+        <b>80</b>
+        <span>今日券库存</span>
+      </div>
+      <div>
+        <b>4.8</b>
+        <span>团长服务分</span>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <div>
+          <b>按场景拼团</b>
+          <span>从今天晚饭到周末囤货</span>
+        </div>
+      </div>
+      <div class="type-list">
+        <button class="type-box" v-for="t in types" :key="t.id" @click="toShopList(t.id, t.name)">
+          <img :src="'/imgs/' + t.icon" alt="">
+          <span>{{t.name}}</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="section-block feed-block">
+      <div class="section-head">
+        <div>
+          <b>团长正在种草</b>
+          <span>真实拼团体验和库存提醒</span>
+        </div>
+      </div>
+      <div class="blog-list" @scroll="onScroll">
+        <article class="blog-box" v-for="b in blogs" :key="b.id">
+          <div class="blog-img" @click="toBlogDetail(b)"><img :src="b.img" alt=""></div>
+          <div class="blog-body">
+            <div class="blog-title">{{b.title}}</div>
+            <div class="blog-foot">
+              <div class="blog-user">
+                <img :src="b.icon || '/imgs/community/photo5.png'" alt="">
+                <span>{{b.name}}</span>
+              </div>
+              <button class="blog-liked" @click="addLike(b)">
+                <i class="el-icon-thumb"></i>{{b.liked}}
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+  <foot-bar :active-btn="1"></foot-bar>
+</div>
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/element.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/footer.js"></script>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      isReachBottom: false,
+      types: [],
+      blogs: [],
+      current: 1
+    },
+    created() {
+      this.queryTypes();
+      this.queryHotBlogsScroll();
+    },
+    methods: {
+      queryTypes() {
+        axios.get("/shop-type/list")
+          .then(({data}) => { this.types = data || []; })
+          .catch(err => { this.$message.error(err); })
+      },
+      queryHotBlogsScroll() {
+        axios.get("/blog/hot?current=" + this.current)
+          .then(({data}) => {
+            (data || []).forEach(b => b.img = b.images.split(",")[0]);
+            this.blogs = this.blogs.concat(data || []);
+          })
+          .catch(err => { this.$message.error(err); })
+      },
+      addLike(b) {
+        axios.put("/blog/like/" + b.id)
+          .then(() => { this.queryBlogById(b); })
+          .catch(err => { this.$message.error(err); })
+      },
+      queryBlogById(b) {
+        axios.get("/blog/" + b.id)
+          .then(({data}) => {
+            b.liked = data.liked;
+            b.isLike = data.isLike;
+          })
+          .catch(() => { b.liked++; })
+      },
+      onScroll(e) {
+        const target = e.target;
+        if (target.scrollTop + target.offsetHeight > target.scrollHeight - 4 && !this.isReachBottom) {
+          this.isReachBottom = true;
+          this.current++;
+          this.queryHotBlogsScroll();
+        } else {
+          this.isReachBottom = false;
+        }
+      },
+      toShopList(id, name) {
+        if (!id) return;
+        location.href = "/shop-list.html?type=" + id + "&name=" + encodeURIComponent(name);
+      },
+      toBlogDetail(b) {
+        location.href = "/blog-detail.html?id=" + b.id;
+      }
+    }
+  })
+</script>
+</body>
+</html>
+

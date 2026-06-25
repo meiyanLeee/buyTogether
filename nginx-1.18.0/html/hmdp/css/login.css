@@ -1,0 +1,303 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body, #app {
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    background: #f6f7f3;
+    color: #19201d;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.login-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: minmax(330px, 45vh) auto;
+    background:
+        linear-gradient(180deg, rgba(17, 31, 24, 0.08), rgba(246, 247, 243, 0) 54%),
+        #f6f7f3;
+}
+
+.login-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 28px 22px 34px;
+    color: #ffffff;
+    background:
+        linear-gradient(160deg, rgba(9, 81, 58, 0.94), rgba(19, 126, 93, 0.82)),
+        url("../imgs/community/photo1.png") center/cover;
+}
+
+.login-hero::after {
+    content: "";
+    position: absolute;
+    right: -36px;
+    bottom: -28px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.brand-row {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-mark {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff3c4;
+    color: #0b694c;
+    font-size: 25px;
+    font-weight: 900;
+    box-shadow: 0 12px 24px rgba(6, 42, 29, 0.18);
+}
+
+.brand-row h1 {
+    margin: 0 0 3px;
+    font-size: 23px;
+    line-height: 1;
+    letter-spacing: 0;
+}
+
+.brand-row p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 12px;
+}
+
+.ghost-back {
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.hero-copy {
+    position: relative;
+    z-index: 1;
+    margin-top: 54px;
+    max-width: 330px;
+}
+
+.hero-copy h2 {
+    margin: 0 0 10px;
+    font-size: 34px;
+    line-height: 1.12;
+    letter-spacing: 0;
+}
+
+.hero-copy p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.benefit-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 26px;
+}
+
+.benefit-grid div {
+    min-width: 0;
+    padding: 12px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.benefit-grid b,
+.benefit-grid span {
+    display: block;
+}
+
+.benefit-grid b {
+    font-size: 15px;
+    line-height: 1.2;
+}
+
+.benefit-grid span {
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 11px;
+}
+
+.login-card {
+    position: relative;
+    z-index: 2;
+    width: calc(100% - 32px);
+    max-width: 440px;
+    margin: -28px auto 24px;
+    padding: 22px 18px 20px;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(17, 31, 24, 0.12);
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.card-head span {
+    color: #18231d;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.card-head a,
+.form-link-row a {
+    color: #0e7b59;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.field-label {
+    display: block;
+    margin: 14px 0 8px;
+    color: #607067;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-input {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #dde5df;
+    border-radius: 8px;
+    padding: 0 14px;
+    background: #fbfcfa;
+    color: #18231d;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.18s, background-color 0.18s, box-shadow 0.18s;
+}
+
+.form-input:focus {
+    border-color: #0e7b59;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(14, 123, 89, 0.1);
+}
+
+.form-input::placeholder {
+    color: #aeb8b2;
+}
+
+.phone-row {
+    display: flex;
+    gap: 10px;
+}
+
+.phone-row .form-input {
+    min-width: 0;
+    flex: 1;
+}
+
+.code-btn {
+    width: 108px;
+    height: 48px;
+    border: 0;
+    border-radius: 8px;
+    background: #ffd35a;
+    color: #443100;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.code-btn:disabled {
+    opacity: 0.58;
+}
+
+.code-input {
+    margin-bottom: 18px;
+}
+
+.form-link-row {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0 16px;
+}
+
+.login-btn {
+    width: 100%;
+    height: 50px;
+    border: 0;
+    border-radius: 8px;
+    background: #0e7b59;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+    box-shadow: 0 12px 22px rgba(14, 123, 89, 0.22);
+}
+
+.login-btn:active,
+.code-btn:active {
+    transform: translateY(1px);
+}
+
+.agreement {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 16px;
+    color: #7b8981;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.agreement input {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    accent-color: #0e7b59;
+}
+
+@media (max-width: 520px) {
+    .login-shell {
+        grid-template-rows: minmax(350px, 46vh) auto;
+    }
+
+    .login-hero {
+        padding: 24px 18px 34px;
+    }
+
+    .hero-copy {
+        margin-top: 46px;
+    }
+
+    .hero-copy h2 {
+        font-size: 30px;
+    }
+
+    .login-card {
+        width: calc(100% - 24px);
+        margin-top: -34px;
+    }
+}

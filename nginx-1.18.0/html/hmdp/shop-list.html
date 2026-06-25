@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>邻里团购 - 自提点</title>
+  <link rel="stylesheet" href="./css/element.css">
+  <link href="./css/shop-list.css" rel="stylesheet">
+  <link href="./css/main.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <div class="list-shell">
+    <div class="page-head">
+      <button @click="goBack"><i class="el-icon-arrow-left"></i></button>
+      <div>
+        <b>{{typeName || '附近团购'}}</b>
+        <span>附近可自提 · 实时团购库存</span>
+      </div>
+      <button><i class="el-icon-search"></i></button>
+    </div>
+
+    <div class="sort-bar">
+      <div class="sort-item">
+        <el-dropdown trigger="click" @command="handleCommand">
+          <span class="el-dropdown-link">{{typeName || '全部品类'}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="t in types" :key="t.id" :command="t">{{t.name}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <button class="sort-item" @click="sortAndQuery('')">离我最近</button>
+      <button class="sort-item" @click="sortAndQuery('comments')">跟团热度</button>
+      <button class="sort-item" @click="sortAndQuery('score')">服务评分</button>
+    </div>
+
+    <div class="shop-list" @scroll="onScroll">
+      <article class="shop-box" v-for="s in shops" :key="s.id" @click="toDetail(s.id)">
+        <div class="shop-img"><img :src="s.images" alt=""></div>
+        <div class="shop-info">
+          <div class="shop-title">{{s.name}}</div>
+          <div class="shop-tags">
+            <span>{{s.area}}</span>
+            <span>{{s.comments}} 人跟团</span>
+          </div>
+          <div class="shop-rate">
+            <el-rate disabled v-model="s.score/10" text-color="#0f8b8d" show-score></el-rate>
+          </div>
+          <div class="shop-bottom">
+            <span>人均 {{util.formatPrice(s.avgPrice)}} 自提</span>
+            <b v-if="s.distance">{{s.distance < 1000 ? s.distance.toFixed(1) + 'm' : (s.distance/1000).toFixed(1) + 'km'}}</b>
+          </div>
+          <div class="shop-address"><i class="el-icon-location-outline"></i>{{s.address}}</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/element.js"></script>
+<script src="./js/common.js"></script>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      util,
+      isReachBottom: false,
+      types: [],
+      shops: [],
+      typeName: "",
+      params:{
+        typeId: 0,
+        current: 1,
+        sortBy: "",
+        x: 120.149993,
+        y: 30.334229
+      }
+    },
+    created() {
+      this.params.typeId = util.getUrlParam("type");
+      this.typeName = decodeURIComponent(util.getUrlParam("name") || "");
+      this.queryTypes();
+      this.queryShops();
+    },
+    methods: {
+      queryTypes() {
+        axios.get("/shop-type/list")
+          .then(({data}) => { this.types = data || []; })
+          .catch(err => { this.$message.error(err); })
+      },
+      queryShops() {
+        axios.get("/shop/of/type", { params: this.params })
+          .then(({data}) => {
+            if (!data) return;
+            data.forEach(s => s.images = s.images.split(",")[0]);
+            this.shops = this.shops.concat(data);
+          })
+          .catch(err => { this.$message.error(err); })
+      },
+      handleCommand(t) {
+        location.href = "/shop-list.html?type=" + t.id + "&name=" + encodeURIComponent(t.name);
+      },
+      sortAndQuery(sortBy) {
+        this.params.sortBy = sortBy;
+        this.params.current = 1;
+        this.shops = [];
+        this.queryShops();
+      },
+      goBack() {
+        history.back();
+      },
+      toDetail(id) {
+        location.href = "/shop-detail.html?id=" + id;
+      },
+      onScroll(e) {
+        const target = e.target;
+        if (target.scrollTop + target.offsetHeight + 1 > target.scrollHeight && !this.isReachBottom) {
+          this.isReachBottom = true;
+          this.params.current++;
+          this.queryShops();
+        } else {
+          this.isReachBottom = false;
+        }
+      }
+    }
+  })
+</script>
+</body>
+</html>
+

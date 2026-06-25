@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>邻里团购 - 登录</title>
+  <link rel="stylesheet" href="./css/element.css">
+  <link href="./css/login.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <main class="login-shell">
+    <section class="login-hero">
+      <div class="brand-row">
+        <div class="brand-mark">邻</div>
+        <div>
+          <h1>邻里团购</h1>
+          <p>社区自提 · 限时好券 · 团长精选</p>
+        </div>
+      </div>
+      <div class="hero-copy">
+        <h2>今晚好价，先到先得</h2>
+        <p>登录后查看附近自提点、热门美食券和团长种草动态。</p>
+      </div>
+      <div class="benefit-grid">
+        <div><b>次日达</b><span>社区自提</span></div>
+        <div><b>低价券</b><span>限时开抢</span></div>
+        <div><b>邻居荐</b><span>真实反馈</span></div>
+      </div>
+    </section>
+
+    <section class="login-card">
+      <div class="card-head">
+        <span>手机验证码登录</span>
+        <a href="/login2.html">密码登录</a>
+      </div>
+
+      <label class="field-label">手机号</label>
+      <div class="phone-row">
+        <input class="form-input" type="tel" maxlength="11" placeholder="请输入手机号" v-model="form.phone">
+        <button class="code-btn" @click="sendCode" :disabled="disabled">{{ codeBtnMsg }}</button>
+      </div>
+
+      <label class="field-label">验证码</label>
+      <div class="code-input">
+        <input class="form-input" type="text" maxlength="6" placeholder="请输入短信验证码" v-model="form.code">
+      </div>
+
+      <button class="login-btn" @click="login">登录并进入社区</button>
+
+      <label class="agreement">
+        <input type="checkbox" v-model="radio" true-value="1" false-value="">
+        <span>我已阅读并同意《邻里团购用户服务协议》《隐私政策》</span>
+      </label>
+    </section>
+  </main>
+</div>
+
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/element.js"></script>
+<script src="./js/common.js"></script>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      radio: "",
+      disabled: false,
+      codeBtnMsg: "获取验证码",
+      form: {
+        phone: "",
+        code: ""
+      }
+    },
+    methods: {
+      login() {
+        if (!this.radio) {
+          this.$message.error("请先确认用户协议");
+          return;
+        }
+        if (!this.form.phone || !this.form.code) {
+          this.$message.error("手机号和验证码不能为空");
+          return;
+        }
+        axios.post("/user/login", this.form)
+          .then(function (res) {
+            if (res.success && res.data) {
+              setAuthToken(res.data);
+              window.location.replace("/index.html");
+            } else {
+              this.$message.error(res.errorMsg || "登录失败");
+            }
+          }.bind(this))
+          .catch(function (err) {
+            console.error("[Login] request failed:", err);
+            this.$message.error("网络请求异常，请稍后重试");
+          }.bind(this));
+      },
+      sendCode() {
+        if (!this.form.phone) {
+          this.$message.error("手机号不能为空");
+          return;
+        }
+        axios.post("/user/code?phone=" + this.form.phone)
+          .catch(function () {
+            this.$message.error("验证码发送失败");
+          }.bind(this));
+
+        this.disabled = true;
+        var i = 60;
+        var self = this;
+        self.codeBtnMsg = i + "s";
+        var taskId = setInterval(function () {
+          i--;
+          self.codeBtnMsg = i + "s";
+          if (i <= 0) {
+            clearInterval(taskId);
+            self.disabled = false;
+            self.codeBtnMsg = "获取验证码";
+          }
+        }, 1000);
+      }
+    }
+  });
+</script>
+</body>
+</html>

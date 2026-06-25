@@ -1,0 +1,293 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+body,
+#app {
+    background: #eef2f3;
+}
+
+.detail-shell {
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 18px;
+}
+
+.detail-hero {
+    position: relative;
+    height: 286px;
+    overflow: hidden;
+    background: #101820;
+}
+
+.detail-hero > img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.hero-mask {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(16, 24, 32, .35), rgba(16, 24, 32, .92));
+}
+
+.hero-nav {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 12px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hero-nav button {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .88);
+    color: #17202a;
+    font-size: 18px;
+}
+
+.hero-info {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 18px;
+    color: #fff;
+}
+
+.hero-badge {
+    display: inline-flex;
+    height: 24px;
+    align-items: center;
+    padding: 0 8px;
+    border-radius: 8px;
+    background: #ffc457;
+    color: #17202a;
+    font-weight: 700;
+}
+
+.hero-info h1 {
+    margin: 10px 0 6px;
+    font-size: 26px;
+    line-height: 32px;
+}
+
+.hero-info p {
+    margin: 0;
+    color: rgba(255, 255, 255, .86);
+}
+
+.pickup-card,
+.voucher-section,
+.comment-section,
+.notice-grid {
+    margin: 12px;
+}
+
+.pickup-card {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(18, 34, 44, .07);
+}
+
+.pickup-card b,
+.pickup-card span {
+    display: block;
+}
+
+.pickup-card b {
+    color: #17202a;
+    font-size: 14px;
+}
+
+.pickup-card span {
+    margin-top: 3px;
+    color: #667681;
+}
+
+.gallery-row {
+    margin: 0 12px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+}
+
+.gallery-row img {
+    width: 116px;
+    height: 86px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex: 0 0 auto;
+}
+
+.voucher-section,
+.comment-section {
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(18, 34, 44, .07);
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+.section-title b {
+    font-size: 17px;
+}
+
+.section-title span {
+    color: #6c7b85;
+    font-size: 11px;
+}
+
+.voucher-box {
+    display: grid;
+    grid-template-columns: 1fr 92px;
+    gap: 10px;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background: #f0f7f7;
+    border: 1px solid #d8e9e8;
+}
+
+.voucher-title {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.voucher-subtitle {
+    margin-top: 5px;
+    color: #6c7b85;
+}
+
+.voucher-price {
+    margin-top: 9px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.voucher-price b {
+    color: #f25f4c;
+    font-size: 20px;
+}
+
+.voucher-price span {
+    color: #7b8892;
+    text-decoration: line-through;
+}
+
+.voucher-right {
+    text-align: right;
+}
+
+.voucher-right button {
+    border: 0;
+    width: 82px;
+    height: 34px;
+    border-radius: 8px;
+    background: #0f8b8d;
+    color: #fff;
+    font-weight: 700;
+}
+
+.voucher-right .disable-btn {
+    background: #9aa6ad;
+}
+
+.voucher-right span,
+.voucher-right small {
+    display: block;
+    margin-top: 6px;
+    color: #6c7b85;
+    font-size: 11px;
+}
+
+.notice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.notice-grid div {
+    min-height: 92px;
+    padding: 10px 8px;
+    border-radius: 8px;
+    background: #fff;
+    text-align: center;
+}
+
+.notice-grid i {
+    color: #0f8b8d;
+    font-size: 22px;
+}
+
+.notice-grid b,
+.notice-grid span {
+    display: block;
+}
+
+.notice-grid b {
+    margin-top: 5px;
+}
+
+.notice-grid span {
+    margin-top: 4px;
+    color: #6c7b85;
+    font-size: 11px;
+    line-height: 15px;
+}
+
+.comment-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 12px;
+}
+
+.comment-tags span {
+    height: 24px;
+    line-height: 24px;
+    padding: 0 8px;
+    border-radius: 8px;
+    background: #f0f7f7;
+    color: #0f8b8d;
+}
+
+.comment-box {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 10px;
+}
+
+.comment-box img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-box b {
+    display: block;
+    font-size: 14px;
+}
+
+.comment-box p {
+    margin: 5px 0 0;
+    color: #5f6e79;
+    line-height: 20px;
+}
+

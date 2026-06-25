@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>邻里团购 - 团长动态</title>
+  <link rel="stylesheet" href="./css/element.css">
+  <link href="./css/blog-detail.css" rel="stylesheet">
+  <link href="./css/main.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <div class="blog-page">
+    <div class="blog-nav">
+      <button @click="goBack"><i class="el-icon-arrow-left"></i></button>
+      <span>团长种草</span>
+      <button><i class="el-icon-more"></i></button>
+    </div>
+
+    <div class="blog-cover" v-if="blog.images">
+      <img :src="blog.images[0]" alt="">
+    </div>
+
+    <section class="author-card">
+      <img :src="blog.icon || '/imgs/community/photo5.png'" alt="" @click="toOtherInfo">
+      <div>
+        <b>{{blog.name}}</b>
+        <span>{{formatTime(new Date(blog.createTime))}}</span>
+      </div>
+      <button @click="follow" v-show="!user || user.id !== blog.userId">{{followed ? '已关注' : '关注团长'}}</button>
+    </section>
+
+    <section class="content-card">
+      <h1>{{blog.title}}</h1>
+      <div class="blog-text" v-html="blog.content"></div>
+      <div class="image-grid" v-if="blog.images">
+        <img v-for="(img, i) in blog.images" :key="i" :src="img" alt="">
+      </div>
+    </section>
+
+    <section class="shop-card" @click="toShopDetail">
+      <img :src="shop.image || '/imgs/community/photo1.png'" alt="">
+      <div>
+        <b>{{shop.name}}</b>
+        <span>人均 {{util.formatPrice(shop.avgPrice)}} · 社区自提</span>
+        <small>{{shop.address}}</small>
+      </div>
+      <i class="el-icon-arrow-right"></i>
+    </section>
+
+    <section class="liked-card">
+      <button @click="addLike" :class="{active: blog.isLike}"><i class="el-icon-thumb"></i>{{blog.liked || 0}}</button>
+      <div class="like-users">
+        <img v-for="u in likes" :key="u.id" :src="u.icon || '/imgs/community/photo8.png'" alt="">
+      </div>
+    </section>
+
+    <section class="comment-card">
+      <div class="section-title"><b>团友讨论</b><span>示例反馈</span></div>
+      <div class="comment-box">
+        <img src="/imgs/community/photo2.png" alt="">
+        <div>
+          <b>自提点小夏</b>
+          <p>这个团购券适合演示从抢券到异步下单的完整链路，页面看起来也比传统内容流更像社区业务。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/element.js"></script>
+<script src="./js/common.js"></script>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      util,
+      blog: {},
+      shop: {},
+      likes: [],
+      user: {},
+      followed: false
+    },
+    created() {
+      const id = util.getUrlParam("id");
+      this.queryBlogById(id);
+    },
+    methods: {
+      goBack() {
+        history.back();
+      },
+      toOtherInfo(){
+        if(this.blog.userId === this.user.id){
+          location.href = "/info.html";
+        }else{
+          location.href = "/other-info.html?id=" + this.blog.userId;
+        }
+      },
+      toShopDetail() {
+        if (this.blog.shopId) {
+          location.href = "/shop-detail.html?id=" + this.blog.shopId;
+        }
+      },
+      queryBlogById(id) {
+        axios.get("/blog/" + id)
+          .then(({data}) => {
+            data.images = data.images.split(",");
+            this.blog = data;
+            this.queryShopById(data.shopId);
+            this.queryLikeList(id);
+            this.queryLoginUser();
+          })
+          .catch(this.$message.error)
+      },
+      queryShopById(shopId) {
+        axios.get("/shop/" + shopId)
+          .then(({data}) => {
+            data.image = data.images.split(",")[0];
+            this.shop = data;
+          })
+          .catch(this.$message.error)
+      },
+      queryLikeList(id){
+        axios.get("/blog/likes/" + id)
+          .then(({data}) => this.likes = data || [])
+          .catch(this.$message.error)
+      },
+      addLike(){
+        axios.put("/blog/like/" + this.blog.id)
+          .then(() => this.queryBlogById(this.blog.id))
+          .catch(err => { this.$message.error(err); })
+      },
+      isFollowed(){
+        axios.get("/follow/or/not/" + this.blog.userId)
+          .then(({data}) => this.followed = data)
+          .catch(this.$message.error)
+      },
+      follow(){
+        axios.put("/follow/" + this.blog.userId + "/" + !this.followed)
+          .then(() => {
+            this.$message.success(this.followed ? "已取消关注" : "已关注团长");
+            this.followed = !this.followed;
+          })
+          .catch(this.$message.error)
+      },
+      formatTime(b) {
+        if (!b || isNaN(b.getTime())) return "";
+        return b.getFullYear() + "年" + (b.getMonth() + 1) + "月" + b.getDate() + "日";
+      },
+      queryLoginUser(){
+        axios.get("/user/me")
+          .then(({ data }) => {
+            this.user = data || {};
+            if(this.user.id !== this.blog.userId){
+              this.isFollowed();
+            }
+          })
+          .catch(console.log)
+      }
+    }
+  })
+</script>
+</body>
+</html>
+
+
