@@ -1,25 +1,9 @@
-﻿/*
- Navicat Premium Data Transfer
-
- Source Server         : local
- Source Server Type    : MySQL
- Source Server Version : 50622
- Source Host           : localhost:3306
- Source Schema         : buyTogether
-
- Target Server Type    : MySQL
- Target Server Version : 50622
- File Encoding         : 65001
-
- Date: 14/03/2022 21:38:11
-*/
+﻿
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
--- ----------------------------
--- Table structure for tb_blog
--- ----------------------------
+
 DROP TABLE IF EXISTS `tb_blog`;
 CREATE TABLE `tb_blog`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -35,17 +19,12 @@ CREATE TABLE `tb_blog`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_blog
--- ----------------------------
+
 INSERT INTO `tb_blog` VALUES (4, 4, 2, '下班顺路取晚餐｜乐堤港进口零食团实测', '/imgs/community/photo1.png,/imgs/community/photo2.png,/imgs/community/photo3.png', '今天团长把进口零食和半成品晚餐一起上架，19:30 前下单，第二天小区门口自提。<br/>我选了儿童零食包、低糖饮料和一份家庭小食，价格比单买更稳。<br/>适合不想跑超市的工作日晚上，团长还会在群里提醒到货和缺货替换。', 36, 28, '2026-06-19 19:50:01', '2026-06-19 20:10:34');
 INSERT INTO `tb_blog` VALUES (5, 1, 2, '邻里鲜食自提点｜早餐和蔬菜一起拼更省', '/imgs/community/photo4.png,/imgs/community/photo5.png,/imgs/community/photo6.png', '这周鲜食团主打早餐、净菜和当季水果，早上不用排队，晚上顺路拿。<br/>我比较喜欢它的库存提示和取货时间提醒，页面里能直接看到团购券剩余量。<br/>如果家里两三个人吃饭，建议搭一个蔬菜包加一份主食，刚好覆盖两天晚餐。', 58, 41, '2026-06-19 20:57:49', '2026-06-19 21:21:39');
 INSERT INTO `tb_blog` VALUES (6, 10, 1, '运河鲜果次日达｜桃子和猕猴桃这波可以冲', '/imgs/community/photo7.png,/imgs/community/photo8.png,/imgs/community/photo9.png', '今天跟了运河鲜果次日达，团长提前把规格、坏果售后和自提时间写清楚了。<br/>水果图片都换成实拍素材，页面看起来更像真实社区团购。<br/>建议先抢限时券，再按家庭人数拼单，满额后团长会统一通知到货。', 44, 19, '2026-06-19 16:05:47', '2026-06-19 18:21:41');
 INSERT INTO `tb_blog` VALUES (7, 5, 1, '火锅食材周五团｜肉卷丸子一次配齐', '/imgs/community/photo10.png,/imgs/community/photo11.png,/imgs/community/photo12.png', '周五晚上适合开一个家庭火锅团，水晶城火锅食材团今天有肉卷、丸子和底料组合。<br/>我看重的是自提点近、库存透明、券有效期清楚，抢到券之后不怕忘记核销。<br/>这条动态也适合展示 Redis 秒杀、Stream 异步下单和一人一单限制。', 71, 33, '2026-06-19 16:35:47', '2026-06-19 18:31:42');
 
--- ----------------------------
--- Table structure for tb_blog_comments
--- ----------------------------
 DROP TABLE IF EXISTS `tb_blog_comments`;
 CREATE TABLE `tb_blog_comments`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -61,13 +40,7 @@ CREATE TABLE `tb_blog_comments`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_blog_comments
--- ----------------------------
 
--- ----------------------------
--- Table structure for tb_follow
--- ----------------------------
 DROP TABLE IF EXISTS `tb_follow`;
 CREATE TABLE `tb_follow`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -77,13 +50,7 @@ CREATE TABLE `tb_follow`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_follow
--- ----------------------------
 
--- ----------------------------
--- Table structure for tb_seckill_voucher
--- ----------------------------
 DROP TABLE IF EXISTS `tb_seckill_voucher`;
 CREATE TABLE `tb_seckill_voucher`  (
   `voucher_id` bigint(20) UNSIGNED NOT NULL COMMENT '关联的优惠券的id',
@@ -95,14 +62,8 @@ CREATE TABLE `tb_seckill_voucher`  (
   PRIMARY KEY (`voucher_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '秒杀优惠券表，与优惠券是一对一关系' ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_seckill_voucher
--- ----------------------------
 INSERT INTO `tb_seckill_voucher` VALUES (1, 80, '2026-06-19 09:00:00', '2026-06-19 09:00:00', '2026-12-31 23:59:59', '2026-06-19 09:00:00');
 
--- ----------------------------
--- Table structure for tb_shop
--- ----------------------------
 DROP TABLE IF EXISTS `tb_shop`;
 CREATE TABLE `tb_shop`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -124,9 +85,7 @@ CREATE TABLE `tb_shop`  (
   INDEX `foreign_key_type`(`type_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_shop
--- ----------------------------
+
 INSERT INTO `tb_shop` VALUES (1, '邻里鲜食自提点', 1, '/imgs/community/photo1.png,/imgs/community/photo2.png,/imgs/community/photo3.png', '大关', '金华路锦昌文华苑29号', 120.149192, 30.316078, 80, 0000004215, 0000003035, 37, '10:00-22:00', '2021-12-22 18:10:39', '2022-01-13 17:32:19');
 INSERT INTO `tb_shop` VALUES (2, '老街牛羊肉团购仓', 1, '/imgs/community/photo2.png,/imgs/community/photo3.png,/imgs/community/photo4.png', '拱宸桥/上塘', '上塘路1035号（中国工商银行旁）', 120.151505, 30.333422, 85, 0000002160, 0000001460, 46, '11:30-03:00', '2021-12-22 19:00:13', '2022-01-11 16:12:26');
 INSERT INTO `tb_shop` VALUES (3, '运河社区熟食团', 1, '/imgs/community/photo3.png,/imgs/community/photo4.png,/imgs/community/photo5.png', '运河上街', '台州路2号运河上街购物中心F5', 120.151954, 30.32497, 61, 0000012035, 0000008045, 47, '10:30-21:00', '2021-12-22 19:10:05', '2022-01-11 16:12:42');
@@ -142,9 +101,6 @@ INSERT INTO `tb_shop` VALUES (12, '乐堤港烘焙团购站', 2, '/imgs/communit
 INSERT INTO `tb_shop` VALUES (13, '北城家庭清洁团', 2, '/imgs/community/photo1.png,/imgs/community/photo2.png,/imgs/community/photo3.png', 'D32天阳购物中心', '湖州街567号北城天地5层', 120.130453, 30.327655, 58, 0000018997, 0000001857, 41, '12:00-02:00', '2021-12-22 20:38:54', '2021-12-22 20:40:04');
 INSERT INTO `tb_shop` VALUES (14, '万达纸品日用团', 2, '/imgs/community/photo2.png,/imgs/community/photo3.png,/imgs/community/photo4.png', '北部新城', '杭行路666号万达广场C座1-2F', 120.128958, 30.337252, 60, 0000017771, 0000000685, 47, '10:00-22:00', '2021-12-22 20:48:54', '2021-12-22 20:48:54');
 
--- ----------------------------
--- Table structure for tb_shop_type
--- ----------------------------
 DROP TABLE IF EXISTS `tb_shop_type`;
 CREATE TABLE `tb_shop_type`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -156,9 +112,6 @@ CREATE TABLE `tb_shop_type`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_shop_type
--- ----------------------------
 INSERT INTO `tb_shop_type` VALUES (1, '社区餐食', 'community/photo1.png', 1, '2021-12-22 20:17:47', '2021-12-23 11:24:31');
 INSERT INTO `tb_shop_type` VALUES (2, '生鲜果蔬', 'community/photo2.png', 2, '2021-12-22 20:18:27', '2021-12-23 11:24:31');
 INSERT INTO `tb_shop_type` VALUES (3, '家庭日用', 'community/photo3.png', 3, '2021-12-22 20:18:48', '2021-12-23 11:24:31');
@@ -170,9 +123,6 @@ INSERT INTO `tb_shop_type` VALUES (8, '夜宵小食', 'community/photo8.png', 8,
 INSERT INTO `tb_shop_type` VALUES (9, '社区聚会', 'community/photo9.png', 9, '2021-12-22 20:20:08', '2021-12-23 11:24:31');
 INSERT INTO `tb_shop_type` VALUES (10, '美护个清', 'community/photo10.png', 4, '2021-12-22 20:21:46', '2021-12-23 11:24:31');
 
--- ----------------------------
--- Table structure for tb_sign
--- ----------------------------
 DROP TABLE IF EXISTS `tb_sign`;
 CREATE TABLE `tb_sign`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -184,13 +134,7 @@ CREATE TABLE `tb_sign`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_sign
--- ----------------------------
 
--- ----------------------------
--- Table structure for tb_user
--- ----------------------------
 DROP TABLE IF EXISTS `tb_user`;
 CREATE TABLE `tb_user`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -204,9 +148,6 @@ CREATE TABLE `tb_user`  (
   UNIQUE INDEX `uniqe_key_phone`(`phone`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1010 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_user
--- ----------------------------
 INSERT INTO `tb_user` VALUES (1, '13686869696', '', '团长阿青', '/imgs/community/photo8.png', '2021-12-24 10:27:19', '2022-01-11 16:04:00');
 INSERT INTO `tb_user` VALUES (2, '13838411438', '', '社区买手小鹿', '/imgs/community/photo5.png', '2021-12-24 15:14:39', '2021-12-28 19:58:04');
 INSERT INTO `tb_user` VALUES (4, '13456789011', '', 'user_slxaxy2au9f3tanffaxr', '', '2022-01-07 12:07:53', '2022-01-07 12:07:53');
@@ -1232,13 +1173,7 @@ CREATE TABLE `tb_user_info`  (
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_user_info
--- ----------------------------
 
--- ----------------------------
--- Table structure for tb_voucher
--- ----------------------------
 DROP TABLE IF EXISTS `tb_voucher`;
 CREATE TABLE `tb_voucher`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -1255,14 +1190,10 @@ CREATE TABLE `tb_voucher`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_voucher
--- ----------------------------
+
 INSERT INTO `tb_voucher` VALUES (1, 1, '社区鲜食50元团购券', '限时开团，次日到社区自提点', '限社区自提使用\\n每人限购一份\\n不兑现、不找零\\n到货后请在自提时间内领取', 3990, 5000, 1, 1, '2022-01-04 09:42:39', '2022-01-04 09:43:31');
 
--- ----------------------------
--- Table structure for tb_voucher_order
--- ----------------------------
+
 DROP TABLE IF EXISTS `tb_voucher_order`;
 CREATE TABLE `tb_voucher_order`  (
   `id` bigint(20) NOT NULL COMMENT '主键',
@@ -1278,9 +1209,6 @@ CREATE TABLE `tb_voucher_order`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of tb_voucher_order
--- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
 
