@@ -1,6 +1,6 @@
 ﻿# 邻里团购社区优惠平台
 
-这是基于springboot搭建的社区团购优惠平台。主要功能有社区商户、自提点、团长种草、限时团购券和关注团长 Feed 流，技术栈仍保留 Spring Boot、MyBatis-Plus、Redis、Redisson、Nginx 静态 Vue，方便继续围绕 Redis 高并发和缓存方案讲项目。
+基于springboot+redis搭建的社区团购优惠平台。主要功能有社区商户、自提点、团长种草、限时团购券和关注团长 Feed 流，技术栈有 Spring Boot、MyBatis-Plus、Redis、Redisson、Sa-token、MySQL。
 
 ## 主要改造
 
