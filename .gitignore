@@ -16,7 +16,7 @@ Thumbs.db
 # Runtime logs and generated local data
 *.log
 logs/
-hm-dianping/tokens.txt
+buytogether/tokens.txt
 tokens.txt
 
 # Local caches / unrelated demos
@@ -27,8 +27,8 @@ redis-demo/
 nginx-1.18.0/*
 !nginx-1.18.0/html/
 nginx-1.18.0/html/*
-!nginx-1.18.0/html/hmdp/
-!nginx-1.18.0/html/hmdp/**
+!nginx-1.18.0/html/buyTogether/
+!nginx-1.18.0/html/buyTogether/**
 
 # Never publish bundled server binaries or runtime files.
 nginx-1.18.0/nginx.exe

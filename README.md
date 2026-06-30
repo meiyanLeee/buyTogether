@@ -1,13 +1,13 @@
 ﻿# 邻里团购社区优惠平台
 
-这是基于原练手项目改造的社区团购优惠平台。业务语义从本地生活内容调整为社区商户、自提点、团长种草、限时团购券和关注团长 Feed 流，技术栈仍保留 Spring Boot、MyBatis-Plus、Redis、Redisson、Nginx 静态 Vue，方便继续围绕 Redis 高并发和缓存方案讲项目。
+这是基于springboot搭建的社区团购优惠平台。主要功能有社区商户、自提点、团长种草、限时团购券和关注团长 Feed 流，技术栈仍保留 Spring Boot、MyBatis-Plus、Redis、Redisson、Nginx 静态 Vue，方便继续围绕 Redis 高并发和缓存方案讲项目。
 
 ## 主要改造
 
 - 登录认证：手机号验证码/密码登录后使用 Sa-Token 签发 token，前端通过 `satoken` 请求头携带。
 - 首页视觉：改为社区团购首页，包含自提点入口、场景品类、团长动态和团购券引导。
 - 数据内容：SQL 种子数据改成社区团购商户、团长动态、限时团购券和本地图片素材。
-- 图片资源：社区团购图片位于 `nginx-1.18.0/html/hmdp/imgs/community`。
+- 图片资源：社区团购图片位于 `nginx-1.18.0/html/buyTogether/imgs/community`。
 - Redis 能力：保留缓存穿透、互斥锁、逻辑过期、GEO 附近商户、Stream 异步下单、Redisson 一人一单。
 
 ## 环境准备
@@ -19,7 +19,7 @@
 - MySQL 5.7 或 8.x
 - Redis 6+
 
-数据库默认连接配置在 `hm-dianping/src/main/resources/application.yml`，可以用环境变量覆盖：
+数据库默认连接配置在 `buytogether/src/main/resources/application.yml`，可以用环境变量覆盖：
 
 ```powershell
 $env:MYSQL_URL="jdbc:mysql://localhost:3306/dianping?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
@@ -37,20 +37,20 @@ $env:REDIS_DATABASE="10"
 
 ```sql
 CREATE DATABASE IF NOT EXISTS dianping DEFAULT CHARACTER SET utf8mb4;
-USE dianping;
-SOURCE hm-dianping/src/main/resources/db/hmdp.sql;
+USE buyTogether;
+SOURCE buyTogether/src/main/resources/db/buyTogether.sql;
 ```
 
 也可以导入后端资源目录中的同版 SQL：
 
 ```text
-hm-dianping/src/main/resources/db/hmdp.sql
+buyTogether/src/main/resources/db/buyTogether.sql
 ```
 
 ## 启动后端
 
 ```powershell
-cd hm-dianping
+cd buyTogether
 mvn spring-boot:run
 ```
 
@@ -58,7 +58,7 @@ mvn spring-boot:run
 
 ## 启动前端
 
-前端是静态 Vue 页面，仓库只保留页面代码和图片资源。可以用任意静态服务器托管 `nginx-1.18.0/html/hmdp`，例如使用本机已安装的 Nginx 指向该目录。
+前端是静态 Vue 页面，仓库只保留页面代码和图片资源。可以用任意静态服务器托管 `nginx-1.18.0/html/buyTogether`，例如使用本机已安装的 Nginx 指向该目录。
 
 浏览器访问：
 
@@ -79,7 +79,7 @@ http://localhost
 预热工具在：
 
 ```text
-hm-dianping/src/test/java/com/hmdp/DataPreheatTests.java
+buyTogether/src/test/java/com/buyTogether/DataPreheatTests.java
 ```
 
 它默认带有 `@Disabled`，避免普通测试依赖本地 MySQL/Redis。需要预热时临时去掉类上的 `@Disabled`，再运行对应方法：
@@ -92,7 +92,7 @@ hm-dianping/src/test/java/com/hmdp/DataPreheatTests.java
 ## 测试
 
 ```powershell
-cd hm-dianping
+cd buyTogether
 mvn test
 ```
 
